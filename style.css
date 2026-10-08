@@ -1,0 +1,1096 @@
+/* ==========================================================
+   INVITACIÓN 55 AÑOS — style.css
+   Índice:
+   1. RESET            9. TARJETA (fondo del cuadro)
+   2. VARIABLES       10. FOTOGRAFÍA
+   3. BODY            11. TIPOGRAFÍA
+   4. INTRO           12. ANIMACIONES (brillo, flotación)
+   5. HERO            13. RSVP
+   6. FONDO           14. MODAL
+   7. CÍRCULO         15. RESPONSIVE
+   8. FLORES          16. REDUCED MOTION
+   ========================================================== */
+
+/* ==========================================================
+   1. RESET
+   ========================================================== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* Si una imagen aún no existe en /assets/, se oculta sin romper la página */
+img.is-missing {
+  visibility: hidden;
+}
+
+button,
+input {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  border: 0;
+  background: none;
+}
+
+/* ==========================================================
+   2. VARIABLES
+   ========================================================== */
+:root {
+  /* Paleta */
+  --ink: #1f1c1a;
+  --ink-soft: #4a4540;
+  --ivory: #fbf8f2;
+  --paper: #f4efe6;
+  --linen: #8aa3b8;
+  --stone: #8c8079;
+  --gold: #a68b5b;
+  --error: #9b3a34;
+
+  /* Tipografías (máximo 3) */
+  --font-title: "Playfair Display", "Times New Roman", serif;
+  --font-script: "Pinyon Script", "Brush Script MT", cursive;
+  --font-text: "Cormorant Garamond", Georgia, serif;
+
+  /* Curvas de animación */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-text: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* Rotación de la tarjeta (se reduce en móvil) */
+  --card-rot: -3deg;
+  --card-rot-start: -7deg;
+
+  /* Panel de texto sobre la tarjeta.
+     Déjalo transparente si tu fondo-cuadro.png ya trae la zona blanca.
+     Si tu imagen es solo el marco, cámbialo a var(--ivory). */
+  --panel-bg: transparent;
+}
+
+/* ==========================================================
+   3. BODY
+   ========================================================== */
+body {
+  min-height: 100vh;
+  background-color: var(--linen);
+  color: var(--ink);
+  font-family: var(--font-text);
+  font-size: 18px;
+  line-height: 1.5;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+body.no-scroll {
+  overflow: hidden;
+  height: 100vh;
+}
+
+:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+
+/* Botón elegante reutilizable */
+.btn {
+  display: inline-block;
+  padding: 16px 38px;
+  min-height: 52px;
+  border: 1px solid var(--ink);
+  background: var(--ink);
+  color: var(--ivory);
+  font-family: var(--font-title);
+  font-size: 0.78rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  transition: transform 0.3s var(--ease-text), background 0.3s, color 0.3s,
+    box-shadow 0.3s;
+}
+
+.btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.18);
+}
+
+.btn:active {
+  transform: scale(0.96);
+  box-shadow: none;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: wait;
+  transform: none;
+}
+
+.btn--ghost {
+  background: transparent;
+  color: var(--ink);
+}
+
+.btn--ghost:hover {
+  background: var(--ink);
+  color: var(--ivory);
+}
+
+/* ==========================================================
+   4. INTRO
+   ========================================================== */
+#intro-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: radial-gradient(ellipse at 50% 40%, #fdfaf4 0%, #ece4d5 100%);
+  text-align: center;
+  transition: opacity 0.9s ease, visibility 0.9s;
+}
+
+#intro-screen.hide {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* Marco fino interior */
+#intro-screen::before {
+  content: "";
+  position: absolute;
+  inset: clamp(12px, 3vw, 32px);
+  border: 1px solid rgba(166, 139, 91, 0.55);
+  pointer-events: none;
+}
+
+.intro-content {
+  position: relative;
+  max-width: 520px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  animation: introIn 1.6s var(--ease-out) both;
+}
+
+.intro-lead {
+  font-family: var(--font-script);
+  font-size: clamp(1.9rem, 7vw, 2.8rem);
+  line-height: 1.15;
+  color: var(--ink-soft);
+}
+
+.intro-number {
+  font-family: var(--font-title);
+  font-weight: 400;
+  font-size: clamp(3.4rem, 15vw, 6.4rem);
+  line-height: 1;
+  letter-spacing: 0.02em;
+}
+
+.intro-number small {
+  display: block;
+  margin-top: 6px;
+  font-family: var(--font-text);
+  font-style: italic;
+  font-size: clamp(1.2rem, 4.4vw, 1.7rem);
+  letter-spacing: 0.04em;
+  color: var(--ink-soft);
+}
+
+.intro-rule {
+  width: 72px;
+  height: 1px;
+  background: var(--gold);
+}
+
+#intro-screen .btn {
+  margin-top: 12px;
+}
+
+@keyframes introIn {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ==========================================================
+   5. HERO
+   ========================================================== */
+#invitation {
+  position: relative;
+}
+
+.hero {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  padding: clamp(90px, 14vh, 150px) 0;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* ==========================================================
+   6. FONDO
+   (Estado inicial oculto → clase .show lo revela)
+   ========================================================== */
+.background {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  filter: blur(8px);
+  transform: scale(1.04);
+  transition: opacity 1.2s ease, filter 1.2s ease, transform 1.2s ease;
+}
+
+.background.show {
+  opacity: 1;
+  filter: blur(0);
+  transform: scale(1);
+}
+
+/* ==========================================================
+   7. CÍRCULO
+   ========================================================== */
+.wood-circle {
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%; /* centrado; 'transform' queda libre para animar */
+  width: min(125vw, 1050px);
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: contain;
+  opacity: 0;
+  transform: scale(0.65) rotate(-8deg);
+  filter: drop-shadow(0 0 0 rgba(0, 0, 0, 0));
+  transition: opacity 1.2s var(--ease-out), transform 1.2s var(--ease-out),
+    filter 1.6s ease;
+}
+
+.wood-circle.show {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+  filter: drop-shadow(0 28px 36px rgba(20, 30, 40, 0.3));
+}
+
+/* ==========================================================
+   8. FLORES
+   ========================================================== */
+.flowers {
+  position: absolute;
+  z-index: 3;
+  height: auto;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 1s var(--ease-out), transform 1s var(--ease-out);
+}
+
+.flowers-top {
+  top: 0;
+  right: 0;
+  width: min(34vw, 400px, 62vh);
+  transform: translateY(-40px) scale(0.85);
+  transform-origin: top right;
+}
+
+.flowers-bottom {
+  bottom: 0;
+  left: 0;
+  width: min(38vw, 440px, 66vh);
+  transform: translateY(40px) scale(0.85);
+  transform-origin: bottom left;
+}
+
+.flowers.show {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* Movimiento orgánico casi imperceptible (usa 'translate', no 'transform') */
+.hero.settled .flowers {
+  animation: flowerFloat 5s ease-in-out infinite;
+}
+
+.hero.settled .flowers-bottom {
+  animation-delay: -2.5s;
+}
+
+/* ==========================================================
+   9. TARJETA
+   ========================================================== */
+.invitation-card {
+  position: relative;
+  z-index: 2;
+  container-type: inline-size;
+  width: min(92vw, 940px);
+  aspect-ratio: 1.3 / 1;
+  display: grid;
+  grid-template-columns: 54% 46%;
+  background-color: var(--ivory); /* respaldo mientras no exista fondo-cuadro.png */
+  box-shadow: 0 30px 50px rgba(15, 25, 35, 0.35),
+    0 6px 14px rgba(15, 25, 35, 0.2);
+  opacity: 0;
+  transform: translateY(80px) scale(0.88) rotate(var(--card-rot-start));
+  transition: opacity 1.4s var(--ease-out), transform 1.4s var(--ease-out);
+
+  /* Tamaños tipográficos de escritorio (relativos al ancho de la tarjeta) */
+  --fs-eyebrow: 1.7cqw;
+  --fs-number: 12.5cqw;
+  --fs-script: 7.2cqw;
+  --fs-sub: 1.78cqw;
+  --fs-lead: 2.4cqw;
+  --fs-date: 2.8cqw;
+  --fs-time: 2.15cqw;
+  --fs-place: 1.78cqw;
+  --fs-small: 1.6cqw;
+}
+
+.invitation-card.show {
+  opacity: 1;
+  transform: translateY(0) scale(1) rotate(var(--card-rot));
+}
+
+.card-background {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.card-background img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Reflejo de luz (una sola vez, izquierda → derecha) */
+.card-shine {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.card-shine::before {
+  content: "";
+  position: absolute;
+  top: -20%;
+  bottom: -20%;
+  left: 0;
+  width: 38%;
+  opacity: 0;
+  transform: translateX(-130%) skewX(-18deg);
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.34) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+}
+
+.card-shine.play::before {
+  animation: shineSweep 2.2s ease-in-out 1 forwards;
+}
+
+/* ==========================================================
+   10. FOTOGRAFÍA
+   ========================================================== */
+.photo-container {
+  position: relative;
+  z-index: 2;
+  margin: 5.2cqw 0 5.2cqw 5.2cqw;
+  overflow: hidden;
+  background: #e4dfd5; /* tono neutro mientras no exista foto.jpg */
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.22);
+  opacity: 0;
+  clip-path: inset(0 100% 0 0);
+  transform: scale(1.08) translateX(-20px);
+  transition: opacity 1.2s var(--ease-out), transform 1.2s var(--ease-out),
+    clip-path 1.4s var(--ease-out);
+}
+
+.photo-container.show {
+  opacity: 1;
+  clip-path: inset(0 0 0 0);
+  transform: scale(1) translateX(0);
+}
+
+.photo-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(0.15) sepia(0.12); /* toque vintage suave; elimina esta línea si no lo quieres */
+}
+
+/* ==========================================================
+   11. TIPOGRAFÍA / CONTENIDO
+   ========================================================== */
+.invitation-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 3.5cqw 3.2cqw;
+  background: var(--panel-bg);
+  color: var(--ink);
+}
+
+.invitation-content p {
+  font-family: var(--font-text);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  line-height: 1.35;
+  font-weight: 500;
+}
+
+/* Cada texto arranca oculto y se revela con .show */
+.reveal-text {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.9s var(--ease-text), transform 0.9s var(--ease-text);
+}
+
+.reveal-text.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.eyebrow {
+  font-size: var(--fs-eyebrow);
+  letter-spacing: 0.4em !important;
+  color: var(--ink-soft);
+}
+
+.anniversary-number {
+  font-family: var(--font-title);
+  font-weight: 400;
+  font-size: var(--fs-number);
+  line-height: 0.95;
+  letter-spacing: -0.01em;
+  margin-top: 0.6cqw;
+  /* Variante especial del "55": nace desenfocado y pequeño */
+  transform: scale(0.7);
+  filter: blur(8px);
+  transition: opacity 1s var(--ease-text), transform 1s var(--ease-text),
+    filter 1s var(--ease-text);
+}
+
+.anniversary-number.show {
+  transform: scale(1);
+  filter: blur(0);
+}
+
+.anniversary-script {
+  font-family: var(--font-script);
+  font-weight: 400;
+  font-size: var(--fs-script);
+  line-height: 1;
+  margin-top: -0.8cqw;
+  margin-bottom: 1.6cqw;
+}
+
+.divider {
+  display: block;
+  width: 8cqw;
+  height: 1px;
+  margin: 1.4cqw auto;
+  background: var(--gold);
+}
+
+.subline {
+  font-size: var(--fs-sub);
+}
+
+.lead {
+  font-style: italic;
+  text-transform: none !important;
+  letter-spacing: 0.04em !important;
+  font-size: var(--fs-lead);
+  margin-top: 0.8cqw;
+}
+
+.date {
+  font-family: var(--font-title) !important;
+  font-size: var(--fs-date);
+  letter-spacing: 0.12em !important;
+  font-weight: 400 !important;
+}
+
+.time {
+  font-family: var(--font-title) !important;
+  font-size: var(--fs-time);
+  letter-spacing: 0.2em !important;
+  margin-top: 0.6cqw;
+  color: var(--ink-soft);
+}
+
+.place {
+  font-size: var(--fs-place);
+  font-weight: 600 !important;
+}
+
+.hall {
+  font-size: var(--fs-place);
+  letter-spacing: 0.22em !important;
+}
+
+.address {
+  font-size: var(--fs-small);
+  color: var(--ink-soft);
+}
+
+/* ==========================================================
+   12. ANIMACIONES
+   ========================================================== */
+@keyframes flowerFloat {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  50% {
+    translate: 0 -4px;
+  }
+}
+
+@keyframes shineSweep {
+  0% {
+    opacity: 0;
+    transform: translateX(-130%) skewX(-18deg);
+  }
+  20% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(330%) skewX(-18deg);
+  }
+}
+
+@keyframes counterBump {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* ==========================================================
+   13. RSVP
+   ========================================================== */
+.rsvp-section {
+  position: relative;
+  padding: clamp(60px, 10vw, 120px) 20px clamp(70px, 10vw, 130px);
+  /* El fondo lo aporta .background (compartido con el hero), sin corte */
+  background: transparent;
+  display: grid;
+  place-items: center;
+}
+
+.rsvp-panel {
+  width: min(100%, 620px);
+  padding: clamp(36px, 7vw, 64px) clamp(22px, 6vw, 56px);
+  text-align: center;
+  background: var(--ivory);
+  box-shadow: 0 24px 44px rgba(15, 25, 35, 0.28);
+  outline: 1px solid rgba(166, 139, 91, 0.6);
+  outline-offset: -12px;
+
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 1s var(--ease-text), transform 1s var(--ease-text);
+}
+
+.rsvp-panel.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.rsvp-panel h2 {
+  font-family: var(--font-title);
+  font-weight: 400;
+  font-size: clamp(1.6rem, 6vw, 2.4rem);
+  letter-spacing: 0.1em;
+  line-height: 1.2;
+}
+
+.rsvp-panel .rsvp-script {
+  margin: 14px 0 6px;
+  font-family: var(--font-script);
+  font-size: clamp(1.7rem, 6vw, 2.3rem);
+  line-height: 1.2;
+  color: var(--ink-soft);
+}
+
+.rsvp-panel .rsvp-text {
+  margin-bottom: 30px;
+  font-size: 1.15rem;
+  color: var(--ink-soft);
+}
+
+.attendance-counter {
+  margin-top: 40px;
+  padding-top: 28px;
+  border-top: 1px solid rgba(166, 139, 91, 0.55);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--font-text);
+  letter-spacing: 0.3em;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.attendance-counter strong {
+  display: inline-block;
+  font-family: var(--font-title);
+  font-weight: 400;
+  font-size: clamp(3rem, 14vw, 4.6rem);
+  line-height: 1.1;
+  letter-spacing: 0;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.attendance-counter strong.bump {
+  animation: counterBump 0.6s var(--ease-text);
+}
+
+/* ==========================================================
+   14. MODAL
+   ========================================================== */
+#rsvpModal {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: rgba(24, 28, 33, 0.62);
+  backdrop-filter: blur(3px);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.35s ease, visibility 0.35s;
+}
+
+#rsvpModal.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal-content {
+  position: relative;
+  width: min(100%, 480px);
+  max-height: 92vh;
+  max-height: 92dvh;
+  overflow-y: auto;
+  padding: 44px clamp(22px, 6vw, 40px) 34px;
+  background: var(--ivory);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  transform: scale(0.95);
+  transition: opacity 0.35s ease, transform 0.35s var(--ease-text);
+}
+
+#rsvpModal.open .modal-content {
+  opacity: 1;
+  transform: scale(1);
+}
+
+#closeModal {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  width: 44px;
+  height: 44px;
+  font-size: 1.9rem;
+  line-height: 1;
+  color: var(--ink-soft);
+  transition: transform 0.3s var(--ease-text), color 0.3s;
+}
+
+#closeModal:hover {
+  color: var(--ink);
+  transform: rotate(90deg);
+}
+
+.modal-content h2 {
+  margin-bottom: 26px;
+  text-align: center;
+  font-family: var(--font-title);
+  font-weight: 400;
+  font-size: 1.35rem;
+  letter-spacing: 0.14em;
+}
+
+#rsvpForm label {
+  display: block;
+  margin-bottom: 18px;
+  font-family: var(--font-title);
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+#rsvpForm input {
+  display: block;
+  width: 100%;
+  margin-top: 8px;
+  padding: 13px 14px;
+  min-height: 50px;
+  background: #fff;
+  border: 1px solid #cfc7b8;
+  border-radius: 0;
+  font-family: var(--font-text);
+  font-size: 1.15rem; /* ≥16px evita el zoom automático en iOS */
+  letter-spacing: 0.02em;
+  text-transform: none;
+  color: var(--ink);
+  transition: border-color 0.35s ease, box-shadow 0.35s ease;
+}
+
+#rsvpForm input:focus {
+  outline: none;
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(166, 139, 91, 0.2);
+}
+
+#rsvpForm .btn {
+  width: 100%;
+  margin-top: 8px;
+  padding-inline: 16px;
+}
+
+#formError {
+  min-height: 1.3em;
+  margin-bottom: 8px;
+  font-size: 1rem;
+  text-align: center;
+  color: var(--error);
+}
+
+#successMessage {
+  display: none;
+  padding: 18px 0 6px;
+  text-align: center;
+}
+
+#successMessage.show {
+  display: block;
+  animation: introIn 0.8s var(--ease-text) both;
+}
+
+#successMessage .success-title {
+  font-family: var(--font-script);
+  font-size: clamp(1.9rem, 7vw, 2.4rem);
+  line-height: 1.25;
+}
+
+#successMessage .success-text {
+  margin: 12px 0 24px;
+  color: var(--ink-soft);
+  font-size: 1.15rem;
+}
+
+/* ==========================================================
+   MÚSICA (botón flotante)
+   ========================================================== */
+.music-toggle {
+  position: fixed;
+  z-index: 150;
+  right: max(14px, env(safe-area-inset-right));
+  bottom: max(14px, env(safe-area-inset-bottom));
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--gold);
+  border-radius: 50%;
+  background: rgba(251, 248, 242, 0.92);
+  color: var(--ink);
+  box-shadow: 0 8px 20px rgba(15, 25, 35, 0.25);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.8s ease, visibility 0.8s, transform 0.3s var(--ease-text);
+}
+
+.music-toggle.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.music-toggle:hover {
+  transform: scale(1.08);
+}
+
+.music-toggle .music-slash {
+  opacity: 0;
+}
+
+/* Sonando: aro que late suavemente. Pausado: se tacha la nota. */
+.music-toggle.is-playing::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border: 1px solid var(--gold);
+  border-radius: 50%;
+  animation: musicPulse 2.4s ease-out infinite;
+}
+
+.music-toggle:not(.is-playing) .music-slash {
+  opacity: 1;
+}
+
+@keyframes musicPulse {
+  from {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  to {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .music-toggle.is-playing::after {
+    animation: none;
+    display: none;
+  }
+}
+
+/* ==========================================================
+   15. RESPONSIVE
+   ========================================================== */
+
+/* Tablet vertical y móviles: tarjeta apilada (foto arriba, texto abajo) */
+@media (max-width: 760px) {
+  :root {
+    --card-rot: -1.2deg;
+    --card-rot-start: -4deg;
+  }
+
+  .hero {
+    padding: 110px 0 120px;
+  }
+
+  .wood-circle {
+    width: 150vw;
+  }
+
+  .flowers-top {
+    width: 42vw;
+  }
+
+  .flowers-bottom {
+    width: 46vw;
+  }
+
+  .invitation-card {
+    width: min(88vw, 460px);
+    aspect-ratio: auto;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+
+    --fs-eyebrow: 3.8cqw;
+    --fs-number: 26cqw;
+    --fs-script: 15cqw;
+    --fs-sub: 4cqw;
+    --fs-lead: 5.6cqw;
+    --fs-date: 6.8cqw;
+    --fs-time: 5.1cqw;
+    --fs-place: 4.2cqw;
+    --fs-small: 3.9cqw;
+  }
+
+  .photo-container {
+    margin: 5cqw 5cqw 0;
+    aspect-ratio: 4 / 3;
+    transform: scale(1.08) translateY(-14px);
+  }
+
+  .photo-container.show {
+    transform: scale(1) translateY(0);
+  }
+
+  .invitation-content {
+    padding: 6cqw 6cqw 9cqw;
+  }
+
+  .divider {
+    width: 16cqw;
+    margin: 3cqw auto;
+  }
+
+  .anniversary-script {
+    margin-top: -1.5cqw;
+    margin-bottom: 3cqw;
+  }
+
+  .lead {
+    margin-top: 2cqw;
+  }
+
+  .time {
+    margin-top: 1.4cqw;
+  }
+
+  .invitation-content p + p.place {
+    margin-top: 0.4cqw;
+  }
+}
+
+/* Móviles pequeños (320px – 390px) */
+@media (max-width: 400px) {
+  .hero {
+    padding: 100px 0 110px;
+  }
+
+  .invitation-card {
+    width: 90vw;
+  }
+
+  .btn {
+    padding: 15px 26px;
+    letter-spacing: 0.22em;
+  }
+}
+
+/* Celulares muy pequeños */
+@media (max-width: 400px) {
+  .flowers-top {
+    width: 40vw;
+  }
+
+  .flowers-bottom {
+    width: 44vw;
+  }
+}
+
+/* Celulares / tablets en horizontal (poca altura): flores más discretas */
+@media (max-height: 520px) and (orientation: landscape) {
+  .flowers-top {
+    width: min(24vw, 52vh);
+  }
+
+  .flowers-bottom {
+    width: min(27vw, 56vh);
+  }
+}
+
+/* Tablet horizontal / laptops */
+@media (min-width: 761px) and (max-width: 1100px) {
+  .invitation-card {
+    width: min(90vw, 860px);
+  }
+}
+
+/* Pantallas grandes */
+@media (min-width: 1440px) {
+  .invitation-card {
+    width: 980px;
+  }
+}
+
+/* ==========================================================
+   16. REDUCED MOTION
+   Se mantienen únicamente fades suaves: sin zoom, rotaciones,
+   movimientos de flores ni brillo.
+   ========================================================== */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .background,
+  .wood-circle,
+  .flowers,
+  .flowers-top,
+  .flowers-bottom,
+  .invitation-card,
+  .photo-container,
+  .reveal-text,
+  .anniversary-number,
+  .rsvp-panel,
+  .modal-content {
+    transform: none !important;
+    filter: none !important;
+    clip-path: none !important;
+    transition-property: opacity !important;
+    transition-duration: 0.8s !important;
+  }
+
+  .invitation-card.show {
+    transform: none !important;
+  }
+
+  .hero.settled .flowers {
+    animation: none !important;
+  }
+
+  .card-shine {
+    display: none;
+  }
+
+  .intro-content,
+  #successMessage.show {
+    animation: none;
+  }
+
+  .attendance-counter strong.bump {
+    animation: none;
+  }
+
+  .btn:hover,
+  .btn:active,
+  #closeModal:hover {
+    transform: none;
+  }
+}
